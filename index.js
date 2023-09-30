@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const readline = require('readline');
+const process = require('process');
 
 async function loggify(filePath) {
   return new Promise((resolve, reject) => {
@@ -26,6 +27,14 @@ async function loggify(filePath) {
       }
     });
   });
+}
+
+// Get the file argument from the command line
+const fileArg = process.argv[2];
+
+// If a file argument has been provided, pass it to the loggify function
+if (fileArg) {
+  loggify(fileArg);
 }
 
 module.exports = loggify;
