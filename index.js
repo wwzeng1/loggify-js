@@ -18,13 +18,12 @@ async function loggify(filePath) {
     });
 
     readInterface.on('close', function() {
-      fs.writeFileSync(filePath, fileContent, (error) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve();
-        }
-      });
+      try {
+        fs.writeFileSync(filePath, fileContent);
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
     });
   });
 }
