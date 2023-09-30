@@ -13,7 +13,7 @@ function loggify(filePath) {
   let fileContent = '';
 
   readInterface.on('line', function(line) {
-    fileContent += line + '\nconsole.log();\n';
+    fileContent += line + '\nconsole.log(\'' + line + '\');\n';
   });
 
   readInterface.on('close', function() {
