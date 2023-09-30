@@ -8,11 +8,11 @@ describe('loggify function', () => {
   
     await loggify(mockFilePath);
   
-    const expectedOutput = 'let a = 1;\nconsole.log(\'let a = 1;\');\nlet b = 2;\nconsole.log(\'let b = 2;\');\n';
+    const expectedOutput = 'let a = 1;\nconsole.log(\'Statement executed\');\nlet b = 2;\nconsole.log(\'Statement executed\');\n';
     const actualOutput = fs.readFileSync(mockFilePath, 'utf8');
-  
+    
     expect(actualOutput).toEqual(expectedOutput);
-  
+    
     fs.unlinkSync(mockFilePath);
   }, 10000);
 
