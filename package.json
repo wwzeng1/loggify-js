@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "description": "CLI tool that adds console.log statements after each statement in a JavaScript file",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "jest"
+  },
   "keywords": ["cli", "javascript", "console.log"],
   "author": "Konard",
   "license": "Unlicense",
   "bin": {
     "loggify-js": "index.js"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
   }
 }
