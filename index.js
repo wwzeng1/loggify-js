@@ -28,9 +28,10 @@ async function loggify(filePath) {
 }
 
 function traverseAndLog(node) {
+  const statementTypes = ['ExpressionStatement', 'VariableDeclaration', 'IfStatement', 'ForStatement', 'WhileStatement', 'DoWhileStatement', 'SwitchStatement', 'TryStatement', 'ReturnStatement', 'ThrowStatement', 'BreakStatement', 'ContinueStatement'];
   for (let key in node) {
     if (node[key] && typeof node[key] === 'object') {
-      if (node[key].type === 'ExpressionStatement') {
+      if (statementTypes.includes(node[key].type)) {
         const logStatement = {
           type: 'ExpressionStatement',
           expression: {
