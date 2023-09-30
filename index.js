@@ -3,30 +3,63 @@
 const fs = require('fs');
 const readline = require('readline');
 const process = require('process');
+const escodegen = require('escodegen');
+const parseToCST = require('./parsers/esprimaParser');
 
 async function loggify(filePath) {
   return new Promise((resolve, reject) => {
-    const readInterface = readline.createInterface({
-      input: fs.createReadStream(filePath),
-      output: process.stdout,
-      console: false
-    });
-
-    let fileContent = '';
-
-    readInterface.on('line', function(line) {
-      fileContent += line + '\nconsole.log(\'' + line + '\');\n';
-    });
-
-    readInterface.on('close', function() {
-      try {
-        fs.writeFileSync(filePath, fileContent);
-        resolve();
-      } catch (error) {
-        reject(error);
+    fs.readFile(filePath, 'utf8', function(err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        const cst = parseToCST(data);
+        traverseAndLog(cst);
+        const modifiedCode = escodegen.generate(cst);
+        fs.writeFile(filePath, modifiedCode, function(err) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
       }
     });
   });
+}
+
+function traverseAndLog(node) {
+  for (let key in node) {
+    if (node[key] && typeof node[key] === 'object') {
+      if (node[key].type === 'ExpressionStatement') {
+        const logStatement = {
+          type: 'ExpressionStatement',
+          expression: {
+            type: 'CallExpression',
+            callee: {
+              type: 'MemberExpression',
+              computed: false,
+              object: {
+                type: 'Identifier',
+                name: 'console'
+              },
+              property: {
+                type: 'Identifier',
+                name: 'log'
+              }
+            },
+            arguments: [
+              {
+                type: 'Literal',
+                value: 'Statement executed'
+              }
+            ]
+          }
+        };
+        node.body.splice(node.body.indexOf(node[key]) + 1, 0, logStatement);
+      }
+      traverseAndLog(node[key]);
+    }
+  }
 }
 
 // Get the file argument from the command line
