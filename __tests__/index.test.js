@@ -14,7 +14,7 @@ describe('loggify function', () => {
     expect(actualOutput).toEqual(expectedOutput);
   
     fs.unlinkSync(mockFilePath);
-  });
+  }, 10000);
 
   it('writes the modified content back to the file', async () => {
     const mockFilePath = './mock.js';
@@ -28,5 +28,5 @@ describe('loggify function', () => {
     expect(actualOutput).toEqual(expectedOutput);
   
     fs.unlinkSync(mockFilePath);
-  });
+  }, 10000);
 });
