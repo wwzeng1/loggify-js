@@ -1,6 +1,6 @@
 {
   "name": "loggify-js",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "CLI tool that adds console.log statements after each statement in a JavaScript file",
   "main": "index.js",
   "scripts": {
