@@ -3,21 +3,29 @@
 const fs = require('fs');
 const readline = require('readline');
 
-function loggify(filePath) {
-  const readInterface = readline.createInterface({
-    input: fs.createReadStream(filePath),
-    output: process.stdout,
-    console: false
-  });
+async function loggify(filePath) {
+  return new Promise((resolve, reject) => {
+    const readInterface = readline.createInterface({
+      input: fs.createReadStream(filePath),
+      output: process.stdout,
+      console: false
+    });
 
-  let fileContent = '';
+    let fileContent = '';
 
-  readInterface.on('line', function(line) {
-    fileContent += line + '\nconsole.log(\'' + line + '\');\n';
-  });
+    readInterface.on('line', function(line) {
+      fileContent += line + '\nconsole.log(\'' + line + '\');\n';
+    });
 
-  readInterface.on('close', function() {
-    fs.writeFileSync(filePath, fileContent);
+    readInterface.on('close', function() {
+      fs.writeFileSync(filePath, fileContent, (error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
   });
 }
 
